@@ -4,13 +4,16 @@
 class CSpell : public CCard
 {
 public:
-	virtual int GetType() = 0;
-	virtual std::string GetName() = 0;
-	virtual int GetAttack() = 0;
-	virtual int GetSpecialAbility() = 0;
-	virtual void ReduceHealth(int x) = 0;
-	virtual void IncreaseHealth(int x) = 0;
-	virtual void IncreaseAttack(int x) = 0;
+	CSpell(int type, std::string name, int specialAbility);
+	int GetAttack();
+	int GetHealth();
+	int GetSpecialAbility();
+	void ReduceHealth(int x);
+	void IncreaseHealth(int x);
+	void IncreaseAttack(int x);
+
+private:
+	int specialAbility = none;
 
 };
 

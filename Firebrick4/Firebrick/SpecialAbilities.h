@@ -6,7 +6,11 @@ enum ESpecialAbilities
 	fireball,
 	lightning,
 	bless,
+	vampire,
+	wall,
 	horde,
+	trample,
+	leech,
 	sword,
 	armour
 };

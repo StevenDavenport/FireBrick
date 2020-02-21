@@ -16,6 +16,11 @@ int main()
 ////-------- TODO: --------////
 
 /*
+
+	- On play spec &&&&&& - On attack spec === enum
+
+
+
 	- Test and Debug
 		- make test function or class.
 

@@ -80,7 +80,7 @@ void CGame::Turn(int i)
 	}
 }
 
-void CGame::DoSpecialAbility(int sa, int i, int enemy)
+void CGame::DoSpecialAbility(int sa, int i, int enemy) //////////// make another like this - refactor
 {
 	switch (sa)
 	{

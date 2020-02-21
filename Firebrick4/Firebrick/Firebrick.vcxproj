@@ -151,35 +151,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BasicMinion.h" />
-    <ClInclude Include="Bless.h" />
     <ClInclude Include="Card.h" />
-    <ClInclude Include="GameStates.h" />
-    <ClInclude Include="Horde.h" />
-    <ClInclude Include="Leech.h" />
     <ClInclude Include="Random.h" />
-    <ClInclude Include="Fireball.h" />
-    <ClInclude Include="Lightning.h" />
     <ClInclude Include="Minion.h" />
-    <ClInclude Include="shorthand.h" />
     <ClInclude Include="SpecialAbilities.h" />
-    <ClInclude Include="Spell.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Equipment.h" />
-    <ClInclude Include="Trample.h" />
-    <ClInclude Include="Vampire.h" />
-    <ClInclude Include="Wall.h" />
+    <ClInclude Include="SpecialMinion.h" />
+    <ClInclude Include="Spell.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BasicMinion.cpp" />
-    <ClCompile Include="Bless.cpp" />
     <ClCompile Include="Card.cpp" />
-    <ClCompile Include="Fireball.cpp" />
-    <ClCompile Include="Horde.cpp" />
-    <ClCompile Include="Leech.cpp" />
-    <ClCompile Include="Lightning.cpp" />
     <ClCompile Include="Minion.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -191,11 +175,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Random.cpp" />
-    <ClCompile Include="Spell.cpp" />
     <ClCompile Include="Equipment.cpp" />
-    <ClCompile Include="Trample.cpp" />
-    <ClCompile Include="Vampire.cpp" />
-    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="SpecialMinion.cpp" />
+    <ClCompile Include="Spell.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

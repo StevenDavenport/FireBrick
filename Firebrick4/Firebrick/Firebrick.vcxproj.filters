@@ -24,25 +24,10 @@
     <ClInclude Include="Card.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BasicMinion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Minion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Spell.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Fireball.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Lightning.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Random.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpecialAbilities.h">
@@ -51,28 +36,13 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bless.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vampire.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Horde.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Trample.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Leech.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Equipment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="shorthand.h">
+    <ClInclude Include="Spell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialMinion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,19 +59,7 @@
     <ClCompile Include="Card.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BasicMinion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Minion.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Spell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Fireball.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Lightning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
@@ -110,25 +68,13 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bless.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vampire.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Horde.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Trample.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Leech.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Equipment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Spell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialMinion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

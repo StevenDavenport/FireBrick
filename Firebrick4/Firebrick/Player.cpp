@@ -33,48 +33,48 @@ void CPlayer::SetUpDeck(std::string filename)
 				switch (type[1])
 				{
 				case '0':				// Type 10
-					unshuffledDeck.push_back(std::make_shared<CEquipment>("Sword"));
+					unshuffledDeck.push_back(std::make_shared<CEquipment>(10, "Sword", sword));
 					break;
 
 				case '1':				// Type 11
-					unshuffledDeck.push_back(std::make_shared<CEquipment>("Armour"));
+					unshuffledDeck.push_back(std::make_shared<CEquipment>(11, "Armour", armour));
 					break;
 
 				case ' ':				// Type 1
 					switch (type[2])
 					{
 					case 'O':
-						unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Orc", 2, 2));
+						unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Orc", 2, 2));
 						break;
 
 					case 'G':
-						cards[i][3] == 'o' ? unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Goblin", 2, 1)) 
-							: unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Giant", 4, 4));
+						cards[i][3] == 'o' ? unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Goblin", 2, 1))
+							: unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Giant", 4, 4));
 						break;
 
 					case 'P':
-						unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Pooka", 2, 4));
+						unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Pooka", 2, 4));
 						break;
 
 					case 'T':
-						unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Thorns", 1, 4));
+						unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Thorns", 1, 4));
 						break;
 
 					case 'D':
-						unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Dwarf", 2, 4));
+						unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Dwarf", 2, 4));
 						break;
 
 					case 'C':
-						unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Cannon", 4, 1));
+						unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Cannon", 4, 1));
 						break;
 
 					case 'S':
-						cards[i][3] == 'w' ? unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Swordswinger", 2, 2)) 
-							: unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Spearcarrier", 2, 1));
+						cards[i][3] == 'w' ? unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Swordswinger", 2, 2))
+							: unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Spearcarrier", 2, 1));
 						break;
 
 					case 'E':
-						unshuffledDeck.push_back(std::make_shared<CBasicMinion>("Elf", 1, 4));
+						unshuffledDeck.push_back(std::make_shared<CMinion>(1, "Elf", 1, 4));
 						break;
 
 					default:
@@ -89,42 +89,42 @@ void CPlayer::SetUpDeck(std::string filename)
 				break;
 				
 			case '2':				// Type 2
-				unshuffledDeck.push_back(std::make_shared<CFireball>());
+				unshuffledDeck.push_back(std::make_shared<CSpell>(2, "Fireball", fireball));
 				break;
 
 			case '3':				// Type 3
-				unshuffledDeck.push_back(std::make_shared<CLightning>());
+				unshuffledDeck.push_back(std::make_shared<CSpell>(3, "Lightning", lightning));
 				break;
 
 			case '4':				// Type 4
-				unshuffledDeck.push_back(std::make_shared<CBless>());
+				unshuffledDeck.push_back(std::make_shared<CSpell>(4, "Bless", bless));
 				break;
 
 			case '5':				// Type 5
-				unshuffledDeck.push_back(std::make_shared<CVampire>());
+				unshuffledDeck.push_back(std::make_shared<CSpecialMinion>(5, "Vampire", 2, 3, vampire));
 				break;
 
 			case '6':				// Type 6
-				unshuffledDeck.push_back(std::make_shared<CWall>());
+				unshuffledDeck.push_back(std::make_shared<CSpecialMinion>(6, "Wall", 0, 6, wall));
 				break;
 
 			case '7':				// Type 7
-				unshuffledDeck.push_back(std::make_shared<CHorde>("Rat"));
+				unshuffledDeck.push_back(std::make_shared<CSpecialMinion>(7, "Rat", 1, 2, horde));
 				break;
 
 			case '8':				// Type 8
 				if (type[2] == 'E')
 				{
-					unshuffledDeck.push_back(std::make_shared<CTrample>("Elephant"));
+					unshuffledDeck.push_back(std::make_shared<CSpecialMinion>(8, "Elephant", 3, 6, trample));
 				}
 				else
 				{
-					unshuffledDeck.push_back(std::make_shared<CTrample>("Dragon"));
+					unshuffledDeck.push_back(std::make_shared<CSpecialMinion>(8, "Dragon", 3, 6, trample));
 				}
 				break;
 
 			case '9':				// Type 9
-				unshuffledDeck.push_back(std::make_shared<CLeech>());
+				unshuffledDeck.push_back(std::make_shared<CSpecialMinion>(9, "Leech", 2, 2, leech));
 				break;
 
 			default:

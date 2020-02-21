@@ -4,20 +4,17 @@
 class CMinion : public CCard
 {
 public:
-	virtual int GetType() = 0;
-	virtual std::string GetName() = 0;
-	virtual int GetAttack() = 0;
-	virtual int GetHealth() = 0;
-	virtual int GetSpecialAbility() = 0;
-	virtual void ReduceHealth(int x) = 0;
-	virtual void IncreaseHealth(int x) = 0;
-	virtual void IncreaseAttack(int x) = 0;
-	virtual void IncreaseProtection(int x) = 0;
-	virtual int GetProtection() = 0;/*
-	std::string GetBasicMinionNames(int i);
-	int GetBasicMinionAttack(int i);
-	int GetBasicMinionHealth(int i);*/
+	CMinion(int type, std::string name, int attack, int health);
+	virtual int GetSpecialAbility();
+	int GetAttack();
+	int GetHealth();
+	void ReduceHealth(int x);
+	void IncreaseHealth(int x);
+	void IncreaseAttack(int x);
 
 private:
+	int attack = -1;
+	int health = -1;
+
 };
 

@@ -7,7 +7,7 @@
 class CRandom
 {
 public: 
-	static int Random(const float n);
+	static int Random(const int n);
 	static void SetSeed();
 
 private:

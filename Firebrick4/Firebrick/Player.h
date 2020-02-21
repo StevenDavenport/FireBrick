@@ -1,22 +1,15 @@
 #pragma once
 #include "pch.h"
-#include "vector"
-#include "pch.h"
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "BasicMinion.h"
-#include "Fireball.h"
-#include "Lightning.h"
-#include "Bless.h"
-#include "Vampire.h"
-#include "Wall.h"
-#include "Horde.h"
-#include "Trample.h"
-#include "Leech.h"
+#include "Spell.h"
+#include "Minion.h"
+#include "SpecialMinion.h"
 #include "Equipment.h"
 #include "Random.h"
-#include "shorthand.h"
+
+typedef std::vector<std::shared_ptr<CCard>> Deck;
 
 class CPlayer
 {
@@ -44,7 +37,7 @@ public:
 	int Random(const float n);
 
 private:
-	friend class CGame;
+	//friend class CGame;
 	Deck unshuffledDeck;
 	Deck deck;
 	Deck hand;
@@ -52,9 +45,4 @@ private:
 	std::string cards[100];
 	std::string name;
 	int healthPoints = 30;
-	
-	/*	std::string basicMinionNames[10] = { "Orc", "Goblin", "Pooka", "Thorns",
-		"Giant", "Dwarf","Cannon", "Swordswinger", "Spearcarrier", "Elf" };
-	int basicMinionAttack[10] = { 2, 2, 2, 1, 4, 2, 4, 2, 2, 1 };
-	int basicMinionHealth[10] = { 2, 1, 4, 4, 4, 4, 1, 2, 1, 4 }; TAKEN FROM MINION*/
 };
