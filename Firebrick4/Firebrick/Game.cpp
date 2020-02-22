@@ -1,136 +1,131 @@
 #include "pch.h"
 #include "Game.h"
 
-CGame::CGame()
-{
-	CRandom::SetSeed();
-	std::cout << "Would you like to shuffle the decks? (Y/N)" << std::endl;
-	std::string yn = "";
-	std::cin >> yn;
-	std::cout << "\n\n\n";
-	players[0] = std::make_shared<CPlayer>("Sorceress", "sorceress.txt", yn);
-	players[1] = std::make_shared<CPlayer>("Wizard", "wizard.txt", yn);
+CGame::CGame()																	// Consructor for Game class
+{																				
+	CRandom::SetSeed();															// Sets the seed for random
+	std::cout << "Would you like to shuffle the decks? (Y/N)" << std::endl;		// Asking the user to shuffle or not
+	std::string yn = "";														// Stores the users response 
+	std::cin >> yn;																// User inputs responce 
+	std::cout << "\n\n\n";														// Line spacing 
+	players[0] = std::make_shared<CPlayer>("Sorceress", "sorceress.txt", yn);	// Instantiate Sorc player
+	players[1] = std::make_shared<CPlayer>("Wizard", "wizard.txt", yn);			// Instantiate Wizard player
 }
 
-void CGame::Play()
+void CGame::Play()																// Play runs the game, only public function in CGame class
+{																				
+	while (!gameOver && roundCount < 30)										// Game loop with play conditions 
+	{																			
+		roundCount == 0 ? WelcomeMessage() : Round();							// Calls each round
+	}																			
+}
+
+void CGame::Round()																// Handles each round 
+{																				
+	std::cout << std::endl << "============" << std::endl;						
+	std::cout << "ROUND " << roundCount << std::endl;							// Round statment  
+	std::cout << "============" << std::endl;									
+	for (friendlyIndex = 0; friendlyIndex < 2; friendlyIndex++)					// Loops through each player
+	{																			
+		if (!gameOver)															// Game over checker
+		{																		
+			Turn();																// Start friendly turn
+		}																		
+		else																	
+		{																		
+			return;																// Game Over
+		}																		
+	}																			
+	roundCount++;																// Increase round count
+}
+
+void CGame::WelcomeMessage()													// Handles the first round
+{																				
+	std::cout << "FireBrick by SLDavenport\n\n";								// Publishing message
+	for (int i = 0; i < 2; i++)													// Loop through each player
+	{																			
+		players[i]->FDraw();													// Each player draws a card
+	}																			
+	roundCount++;																// Increase round count
+}
+
+void CGame::Turn() 																// Handles each turn
 {
-	while (!gameOver && roundCount < 30)
+	std::cout << std::endl;														// Output Spacing 
+	enemyIndex = friendlyIndex == 0 ? enemyIndex = 1 : enemyIndex = 0;			// Finding the index of enemy 
+	players[friendlyIndex]->Draw();												// Drawing a card
+	cardSpecialAbility = players[friendlyIndex]->PlayCard();					// Playing a card
+	CastOnPlaySpecialAbility();													// Cast special ability
+	if (OverChecker() == true)													// Game over checker
 	{
-		roundCount == 0 ? WelcomeMessage() : Round();
+		return;																	// Stop the game
+	}
+	PrintCardsOnTable();														// Print table to screen
+	MinionsActivate();									// Attacking Phase
+	if (OverChecker() == true)													// Game over checker
+	{														
+		return;																	// Stop the game
 	}
 }
 
-void CGame::Round()
+bool CGame::OverChecker()														// Game over checker function
 {
-	std::cout << std::endl << "============" << std::endl;
-	std::cout << "ROUND " << roundCount << std::endl;
-	std::cout << "============" << std::endl;
-	for (int i = 0; i < 2; i++)
-	{
-		if (players[i]->GetHealthPoints() > 0)
-		{
-			Turn(i);
-		}
-		else
-		{
-			return;
-		}
-	}
-	roundCount++;
-}
-
-void CGame::WelcomeMessage()
-{
-	std::cout << "FireBrick by SLDavenport\n\n";
-	for (int i = 0; i < 2; i++)
-	{
-		players[i]->FDraw();
-	}
-	roundCount++;
-}
-
-void CGame::Turn(int i) 
-{
-	std::cout << std::endl;
-	int enemy = i == 0 ? enemy = 1 : enemy = 0;
-	int sa = 0;
-
-	// Drawing Phase
-	players[i]->Draw();
-
-	// Playing Phase
-	sa = players[i]->PlayCard();
-	if (sa != 0)
-	{
-		DoSpecialAbility(sa, i, enemy);
-	}
-	if (players[enemy]->GetHealthPoints() <= 0) // game over
+	if (players[enemyIndex]->GetHealthPoints() <= 0)							// Game over condition
 	{
 		gameOver = true;
-		return;
-	}
-	PrintCardsOnTable();
-
-	// Attacking Phase
-	MinionsActivate(i, enemy);
-	if (players[enemy]->GetHealthPoints() <= 0) // game over
-	{
-		gameOver = true;
-		return;
+		return true;															// Return true
 	}
 }
 
-void CGame::DoSpecialAbility(int sa, int i, int enemy) //////////// make another like this - refactor
-{
-	switch (sa)
-	{
-	case none:
-		break;
-
-	case fireball:
-		CastFireball(i, enemy);
-		break;
-
-	case lightning:
-		CastLightning(i, enemy);
-		break;
-
-	case bless:
-		CastBless(i, enemy);
-		break;
-		
-	case horde:
-		CastHorde(i); 
-		break;
-
-	case sword:
-		CastSword(i);
-		break;
-
-	case armour:
-		CastArmour(i);
-		break;
-
-	default:
-		break;
-	}
+void CGame::CastOnPlaySpecialAbility() 											// Cast Special Ability 
+{																				
+	switch (cardSpecialAbility)													// Check which ability to cast
+	{																			// Then cast the appropriate spell
+	case none:																	
+		break;																	
+																				
+	case fireball:																
+		CastFireball();								
+		break;																	
+																				
+	case lightning:																
+		CastLightning();								
+		break;																	
+																				
+	case bless:																	
+		CastBless();									
+		break;																	
+																				
+	case horde:																	
+		CastHorde();												
+		break;																	
+																				
+	case sword:																	
+		CastSword();												
+		break;																	
+																				
+	case armour:																
+		CastArmour();												
+		break;																	
+																				
+	default:																	
+		break;																	
+	}																			
 }
 
-void CGame::PrintCardsOnTable()    
-{
-	Deck scards = players[0]->GetField();
-	Deck wcards = players[1]->GetField();
-
-	std::cout << "--------------" << std::endl;
-	std::cout << "CARDS ON TABLE" << std::endl;
-	std::cout << "Sorceress : ";
-	for (size_t i = 0; i < scards.size(); i++)
+void CGame::PrintCardsOnTable()    												// Prints each players cards
+{																				// On field to console
+	Deck scards = players[0]->GetField();										// Sorcerers field
+	Deck wcards = players[1]->GetField();										// Wizards field
+	std::cout << "--------------" << std::endl;									// Output messages
+	std::cout << "CARDS ON TABLE" << std::endl;									
+	std::cout << "Sorceress : ";												
+	for (size_t i = 0; i < scards.size(); i++)									// Printing field
 	{
 		std::cout << scards[i]->GetName() << " (" << scards[i]->GetHealth() << ")  ";
 	}
 	std::cout << std::endl;
-
-	std::cout << "Wizard : ";
+	std::cout << "Wizard : ";													// Printing field
 	for (size_t i = 0; i < wcards.size(); i++)
 	{
 		std::cout << wcards[i]->GetName() << " (" << wcards[i]->GetHealth() << ")  ";
@@ -139,355 +134,508 @@ void CGame::PrintCardsOnTable()
 	std::cout << "--------------" << std::endl;
 }
 
-void CGame::MinionsActivate(int f, int enemy)
+void CGame::MinionsActivate()
 {
-	Deck friendlyField = players[f]->GetField();
-	Deck enemyField;
-	std::string friendlyName = players[f]->GetName();
-	std::string enemyName = players[enemy]->GetName();
+	// Table in play
+	friendlyField = players[friendlyIndex]->GetField();
 
-	for (size_t i = 0; i < friendlyField.size(); i++)
+	// Size of table in play
+	friendlyFieldSize = friendlyField.size();
+
+	// Player names
+	friendlyPlayerName = players[friendlyIndex]->GetName();
+	enemyPlayerName = players[enemyIndex]->GetName();
+
+	// Loop through the friendly field 
+	for (size_t i = 0; i < friendlyFieldSize; i++)
 	{
-		int efsize = players[enemy]->GetField().size();
-		int attackDammage = friendlyField[i]->GetAttack();
-		std::string attackingMinionName = friendlyField[i]->GetName();
-		Deck ef = players[enemy]->GetField();
+		// Table
+		enemyField = players[enemyIndex]->GetField();
+		enemyFieldSize = enemyField.size();
+
+		// Attack dammage of attacking card
+		attackDammage = friendlyField[i]->GetAttack();
+
+		// Name of the attacking minion
+		attackingMinionName = friendlyField[i]->GetName();
+
+		// flag
 		bool wallOnField = false;
+
+		// Index of wall card
 		int wallIndex = -1;
 
-		for (size_t i = 0; i < ef.size(); i++) // Check if wall is in play
+		// Check if wall is in play
+		for (size_t i = 0; i < enemyFieldSize; i++) 
 		{
-			if (ef[i]->GetType() == 6)
+			if (enemyField[i]->GetSpecialAbility() == wall) 
 			{
 				wallOnField = true;
 				wallIndex = i;
 			}
 		}
-		if (wallOnField) // Attack wall
+		// Attack wall
+		if (wallOnField) 
 		{
-			players[enemy]->ReduceCardHealth(wallIndex, attackDammage);
-			enemyField = players[enemy]->GetField();
-			std::string minionUnderAttack = enemyField[wallIndex]->GetName();
+			// Wall takes dammage
+			players[enemyIndex]->ReduceCardHealth(wallIndex, attackDammage);
 
+			// Refresh 
+			enemyField = players[enemyIndex]->GetField();
+			minionUnderAttack = enemyField[wallIndex]->GetName();
+
+			// If minion dies
 			if (enemyField[wallIndex]->GetHealth() <= 0)
 			{
-				players[enemy]->DeleteFromField(wallIndex);
+				// Delete from play
+				players[enemyIndex]->DeleteFromField(wallIndex);
 				std::cout << attackingMinionName << " attacks " << minionUnderAttack << "... ";
 				std::cout << minionUnderAttack << " has been killed." << std::endl;
 			}
+			// Take dammage
 			else
 			{
 				std::cout << attackingMinionName << " attacks " << minionUnderAttack << "... ";
 				std::cout << minionUnderAttack << " health now : " << enemyField[wallIndex]->GetHealth() << std::endl;
 			}
 		}
-		else if (efsize <= 0) // Attack Player
+		// Attack Player
+		else if (enemyFieldSize <= 0) 
 		{
-			players[enemy]->ReducePlayerHealth(attackDammage);
-			if (players[enemy]->GetHealthPoints() <= 0)
+			// Player takes dammage
+			players[enemyIndex]->ReducePlayerHealth(attackDammage);
+
+			// Player dies
+			if (players[enemyIndex]->GetHealthPoints() <= 0)
 			{
 				
-				std::cout << attackingMinionName << " attacks " << enemyName << "... ";
-				std::cout << enemyName << " has been killed." << std::endl << std::endl; 
-				std::cout << friendlyName << ", you win!" << std::endl; // end game
+				std::cout << attackingMinionName << " attacks " << enemyPlayerName << "... ";
+				std::cout << enemyPlayerName << " has been killed." << std::endl << std::endl; 
+				std::cout << friendlyPlayerName << ", you win!" << std::endl; // end game
 				return;
 			}
 			else
 			{
-				std::cout << attackingMinionName << " attacks " << enemyName << "... ";
-				std::cout << enemyName << " health now : " << players[enemy]->GetHealthPoints() << std::endl;
+				std::cout << attackingMinionName << " attacks " << enemyPlayerName << "... ";
+				std::cout << enemyPlayerName << " health now : " << players[enemyIndex]->GetHealthPoints() << std::endl;
 			}
 		}
 		else // Attack a Minion
 		{
-			Deck enemyField = players[enemy]->GetField();
-			Deck friendlyField = players[f]->GetField();
-			int r = CRandom::Random(efsize-1);
-			int minionUnderAttackHealth = enemyField[r]->GetHealth();
-			players[enemy]->ReduceCardHealth(r, attackDammage);
-			enemyField = players[enemy]->GetField();
-			std::string minionUnderAttack = enemyField[r]->GetName();
+			//  Pick a random card
+			r = CRandom::Random(enemyFieldSize - 1);
 
+			// Card health
+			minionUnderAttackHealth = enemyField[r]->GetHealth();
+
+			// Reduce that cards health
+			players[enemyIndex]->ReduceCardHealth(r, attackDammage);
+
+			// Dammaged minions name
+			minionUnderAttack = enemyField[r]->GetName();
+
+			// Refresh
+			enemyField = players[enemyIndex]->GetField();
+
+			// Minion dies
 			if (enemyField[r]->GetHealth() <= 0)
 			{
-				players[enemy]->DeleteFromField(r);
+				// Delete from play
+				players[enemyIndex]->DeleteFromField(r);
 				std::cout << attackingMinionName << " attacks " << minionUnderAttack << "... ";
 				std::cout << minionUnderAttack << " has been killed." << std::endl;
 				attackDammage -= minionUnderAttackHealth;
-				if (attackDammage > 0 && friendlyField[i]->GetType() == 8)
+				// Check for trample 
+				if (attackDammage > 0 && friendlyField[i]->GetSpecialAbility() == trample) 
 				{
-					CastTrample(i, f, enemy, attackDammage);
+					CastTrample(i);
 				}
 			}
-			else
+			// Minion takes dammage
+			else 
 			{
 				std::cout << attackingMinionName << " attacks " << minionUnderAttack << "... ";
 				std::cout << minionUnderAttack << " health now : " << enemyField[r]->GetHealth() << std::endl;
 			}
 		}
-		if (friendlyField[i]->GetType() == 5) // After attacking, heal if card type 5 (vampire)
+		// If card is a vampire heal it
+		if (friendlyField[i]->GetSpecialAbility() == vampire) 
 		{
-			players[f]->IncreaseCardHealth(i, 1);
+			players[friendlyIndex]->IncreaseCardHealth(i, 1);
 			std::cout << attackingMinionName << " heals... ";
 			std::cout << attackingMinionName << " health now : " << friendlyField[i]->GetHealth() << std::endl;
 		}
-		if (friendlyField[i]->GetType() == 9) // After attacking, heal player if type 9
+		// If card is a leech heal player
+		if (friendlyField[i]->GetSpecialAbility() == leech) 
 		{
-			players[f]->IncreasePlayerHealth(2);
-			std::cout << attackingMinionName << " heals " << players[f]->GetName() << "... ";
-			std::cout << players[f]->GetName() << " health now : " << players[f]->GetHealthPoints() << std::endl;
+			players[friendlyIndex]->IncreasePlayerHealth(2);
+			std::cout << attackingMinionName << " heals " << players[friendlyIndex]->GetName() << "... ";
+			std::cout << players[friendlyIndex]->GetName() << " health now : " << players[friendlyIndex]->GetHealthPoints() << std::endl;
 		}
 	}
 }
 
-void CGame::CastFireball(int i, int enemy)
+void CGame::CastFireball()
 {
-	int n = players[enemy]->GetField().size();
-	int r = CRandom::Random(n);
-	std::string enemyName = players[enemy]->GetName();
-	Deck ef = players[enemy]->GetField();
+	// Delete this card from the field because it is a spell
+	players[friendlyIndex]->DeleteFromField(players[friendlyIndex]->GetField().size() - 1);
+
+	// Enemy field
+	enemyField = players[enemyIndex]->GetField();
+
+	// Size of the enemy field
+	enemyFieldSize = enemyField.size();
+
+	// Generate random number within the enemy field size
+	int r = CRandom::Random(enemyFieldSize);
+
+	// Name of enemy player
+	enemyPlayerName = players[enemyIndex]->GetName();
+
+	// Flag
 	bool wallOnField = false;
+
+	// Index of a card
 	int wallIndex = -1;
 
-	for (size_t i = 0; i < ef.size(); i++) // Check if wall is in play
+	// Check if wall is in play
+	for (size_t i = 0; i < enemyFieldSize; i++) 
 	{
-		if (ef[i]->GetType() == 6)
+		if (enemyField[i]->GetSpecialAbility() == wall)
 		{
 			wallOnField = true;
 			wallIndex = i;
 		}
 	}
-	if (wallOnField) // Attack wall
+	// Attack wall
+	if (wallOnField) 
 	{
-		players[enemy]->ReduceCardHealth(wallIndex, 3);
-		Deck enemyField = players[enemy]->GetField();
-		std::string minionUnderAttack = enemyField[wallIndex]->GetName();
+		// Reduce Card health
+		players[enemyIndex]->ReduceCardHealth(wallIndex, 3);
 
+		// Card under attack name
+		minionUnderAttack = enemyField[wallIndex]->GetName();
+
+		// Enemy Card has been killed
 		if (enemyField[wallIndex]->GetHealth() <= 0)
 		{
-			players[enemy]->DeleteFromField(wallIndex);
+			players[enemyIndex]->DeleteFromField(wallIndex);
 			std::cout << "Fireball strikes " << minionUnderAttack << "... ";
 			std::cout << minionUnderAttack << " has been killed." << std::endl;
 		}
+		// Enemy Card has been dammaged
 		else
 		{
 			std::cout << "Fireball strikes " << minionUnderAttack << "... ";
 			std::cout << minionUnderAttack << " health now : " << enemyField[wallIndex]->GetHealth() << std::endl;
 		}
 	}
-	else if (r == n) // Attack player
+	else if (r == enemyFieldSize) // Attack player
 	{
-		players[enemy]->ReducePlayerHealth(3);
+		// Reduce enemy player health
+		players[enemyIndex]->ReducePlayerHealth(3);
 		
-		if (players[enemy]->GetHealthPoints() <= 0) // Kills Player
+		// If player is killed
+		if (players[enemyIndex]->GetHealthPoints() <= 0) 
 		{
-			std::cout << "Fireball strikes " << enemyName << "... ";
-			std::cout << enemyName << " has been killed." << std::endl << std::endl;
-			std::cout << players[i]->GetName() << ", you win!" << std::endl; // end game
+			std::cout << "Fireball strikes " << enemyPlayerName << "... ";
+			std::cout << enemyPlayerName << " has been killed." << std::endl << std::endl;
+			std::cout << players[friendlyIndex]->GetName() << ", you win!" << std::endl; // end game
 			return;
 		}
-		else // Dammages Player
+		// Dammages Player
+		else 
 		{
-			std::cout << "Fireball strikes " << enemyName << "... ";
-			std::cout << enemyName << " health now : " << players[enemy]->GetHealthPoints() << std::endl;
+			std::cout << "Fireball strikes " << enemyPlayerName << "... ";
+			std::cout << enemyPlayerName << " health now : " << players[enemyIndex]->GetHealthPoints() << std::endl;
 		}
 	}
-	else // Attack minion
+	// Attack minion
+	else 
 	{
-		players[enemy]->ReduceCardHealth(r, 3);
-		Deck enemyField = players[enemy]->GetField();
-		std::string minionUnderAttack = enemyField[r]->GetName();
+		// Card takes dammage
+		players[enemyIndex]->ReduceCardHealth(r, 3);
 
+		// Name of minion to be attacked
+		minionUnderAttack = enemyField[r]->GetName();
+
+		// If the minion is killed
 		if (enemyField[r]->GetHealth() <= 0)
 		{
-			players[enemy]->DeleteFromField(r);
+			// Delete that minion from the dield
+			players[enemyIndex]->DeleteFromField(r);
 			std::cout << "Fireball strikes " << minionUnderAttack << "... ";
 			std::cout << minionUnderAttack << " has been killed." << std::endl;
 		}
+		// Minion is dammaged
 		else
 		{
 			std::cout << "Fireball strikes " << minionUnderAttack << "... ";
 			std::cout << minionUnderAttack << " health now : " << enemyField[r]->GetHealth() << std::endl;
 		}
 	}
-	players[i]->DeleteFromField(players[i]->GetField().size()-1);
 }
 
-void CGame::CastLightning(int f, int enemy)
+void CGame::CastLightning()
 {
-	for (size_t i = 0; i < players[enemy]->GetField().size(); i++)
+	// Delete the spell from the field
+	players[friendlyIndex]->DeleteFromField(players[friendlyIndex]->GetField().size() - 1);
+
+	// Loop throuhg the enemy field
+	for (size_t i = 0; i < players[enemyIndex]->GetField().size(); i++)
 	{
-		players[enemy]->ReduceCardHealth(i, 1);
-		Deck enemyField = players[enemy]->GetField();
+		// Card takes dammage
+		players[enemyIndex]->ReduceCardHealth(i, 1);
+
+		// Enemy field
+		enemyField = players[enemyIndex]->GetField();
+
+		// Name of enemy minion
 		std::string enemyMinion = enemyField[i]->GetName();
 
-		if (enemyField[i]->GetHealth() <= 0) // Kills Minion
+		// Minion has been killed
+		if (enemyField[i]->GetHealth() <= 0) 
 		{
-			players[enemy]->DeleteFromField(i);
+			// Delete from field
+			players[enemyIndex]->DeleteFromField(i);
 			std::cout << "Lightning strikes " << enemyMinion << "... ";
 			std::cout << enemyMinion << " has been killed." << std::endl;
 		}
-		else // Dammages Minion
+		// Damages minion
+		else 
 		{
 			std::cout << "Lightning strikes " << enemyMinion << "... ";
 			std::cout << enemyMinion << " health now : " << enemyField[i]->GetHealth() << std::endl;
 		}
 	}
+	// enemy player takes dammage
+	players[enemyIndex]->ReducePlayerHealth(1);
 
-	players[enemy]->ReducePlayerHealth(1);
-	std::string enemyName = players[enemy]->GetName();
+	// Name of the enemy player
+	std::string enemyName = players[enemyIndex]->GetName();
 
-	if (players[enemy]->GetHealthPoints() <= 0) // Kills Player
+	// Player has been killed
+	if (players[enemyIndex]->GetHealthPoints() <= 0) 
 	{
 		std::cout << "Lightning strikes " << enemyName << "... ";
 		std::cout << enemyName << " has been killed." << std::endl << std::endl;
-		std::cout << players[f]->GetName() << ", you win!" << std::endl; // end game
+		std::cout << players[friendlyIndex]->GetName() << ", you win!" << std::endl; // end game
 	}
-	else // Dammages Player
+	// Dammages Player
+	else 
 	{
 		std::cout << "Lightning strikes " << enemyName << "... ";
-		std::cout << enemyName << " health now : " << players[enemy]->GetHealthPoints() << std::endl;
+		std::cout << enemyName << " health now : " << players[enemyIndex]->GetHealthPoints() << std::endl;
 	}
-	players[f]->DeleteFromField(players[f]->GetField().size() - 1);
 }
 
-void CGame::CastBless(int f, int enemy)
+void CGame::CastBless()
 {
+	// Delete the card from the field because it's a spell card
+	players[friendlyIndex]->DeleteFromField(players[friendlyIndex]->GetField().size() - 1);
 
-	players[f]->DeleteFromField(players[f]->GetField().size() - 1);
-	int who = std::rand() % 1 + 1;
-	std::string enemyName = players[enemy]->GetName();
+	// Generate a random number between 0 and 1
+	int who = CRandom::Random(1);
 
-	if (who == 0) // Enemy
+	// Refresh what is the enemy players name
+	enemyPlayerName = players[enemyIndex]->GetName();
+
+	// Attack the Enemy
+	if (who == 0) 
 	{
-		int n = players[enemy]->GetField().size();
-		int r = CRandom::Random(n);
+		// Refresh enemy field size
+		enemyFieldSize = players[enemyIndex]->GetField().size();
+		int r = CRandom::Random(enemyFieldSize);
 
-		if (r == n) // Attack enemy player
+		// Attack the enemy player
+		if (r == enemyFieldSize) 
 		{
-			players[enemy]->ReducePlayerHealth(2);
+			// Reduce the enemy players health 
+			players[enemyIndex]->ReducePlayerHealth(2);
 
-			if (players[enemy]->GetHealthPoints() <= 0) // Kills Player
+			// If the player has been killed
+			if (players[enemyIndex]->GetHealthPoints() <= 0) 
 			{
-				std::cout << "Bless strikes " << enemyName << "... ";
-				std::cout << enemyName << " has been killed." << std::endl << std::endl;
-				std::cout << players[f]->GetName() << ", you win!" << std::endl; // end game
+				std::cout << "Bless strikes " << enemyPlayerName << "... ";
+				std::cout << enemyPlayerName << " has been killed." << std::endl << std::endl;
+				std::cout << players[friendlyIndex]->GetName() << ", you win!" << std::endl; // end game
 			}
 			else // Dammages Player
 			{
-				std::cout << "Bless strikes " << enemyName << "... ";
-				std::cout << enemyName << " health now : " << players[enemy]->GetHealthPoints() << std::endl;
+				std::cout << "Bless strikes " << enemyPlayerName << "... ";
+				std::cout << enemyPlayerName << " health now : " << players[enemyIndex]->GetHealthPoints() << std::endl;
 			}
 		}
-		else // Attack enemy minion
+		// Attack enemy minion
+		else 
 		{
-			players[enemy]->ReduceCardHealth(r, 2);
-			Deck enemyField = players[enemy]->GetField();
-			std::string minionUnderAttack = enemyField[r]->GetName();
+			// Reduce the health of the minion being attacked
+			players[enemyIndex]->ReduceCardHealth(r, 2);
 
-			if (enemyField[r]->GetHealth() <= 0) // Kills minion
+			// Refresh the enemy field
+			enemyField = players[enemyIndex]->GetField();
+
+			// Refresh minion under attack
+			minionUnderAttack = enemyField[r]->GetName();
+
+			// the minion under attack is killed
+			if (enemyField[r]->GetHealth() <= 0) 
 			{
-				players[enemy]->DeleteFromField(r);
+				// Delete that minion from the field
+				players[enemyIndex]->DeleteFromField(r);
 				std::cout << "Bless strikes " << minionUnderAttack << "... ";
 				std::cout << minionUnderAttack << " has been killed." << std::endl;
 			}
-			else // Dammage minion
+			// The minion recievs dammage
+			else 
 			{
 				std::cout << "Bless strikes " << minionUnderAttack << "... ";
 				std::cout << minionUnderAttack << " health now : " << enemyField[r]->GetHealth() << std::endl;
 			}
 		}
 	}
-	else if (who == 1) // Friendly 
+	// The friendly player will be healed
+	else if (who == 1) 
 	{
-		int n = players[f]->GetField().size();
-		int r = CRandom::Random(n);
-		std::string friendlyName = players[f]->GetName();
+		// Refresh the friendly field
+		friendlyField = players[friendlyIndex]->GetField();
 
-		if (r == n) // Heal Player
+		// Refresh the size of the friendly field
+		friendlyFieldSize = friendlyField.size();
+
+		// Pick a random number within the size of the friendly field
+		r = CRandom::Random(friendlyFieldSize);
+
+		// Refresh the name of the friendly player
+		friendlyPlayerName = players[friendlyIndex]->GetName();
+
+		// Heal the friendly player
+		if (r == friendlyFieldSize) 
 		{
-			players[f]->IncreasePlayerHealth(2);
-			std::cout << "Bless heals " << friendlyName << "... ";
-			std::cout << friendlyName << " health now : " << players[f]->GetHealthPoints() << std::endl;
+			// Increase the friendly players health
+			players[friendlyIndex]->IncreasePlayerHealth(2);
+			std::cout << "Bless heals " << friendlyPlayerName << "... ";
+			std::cout << friendlyPlayerName << " health now : " << players[friendlyIndex]->GetHealthPoints() << std::endl;
 		}
-		else // Heal Minion
+		// Heals a friendly minion
+		else 
 		{
-			players[f]->IncreaseCardHealth(r, 2);
-			Deck friendlyMinions = players[f]->GetField();
-			std::string minionHealed = friendlyMinions[r]->GetName();
+			// Increase the health of a friendly minion
+			players[friendlyIndex]->IncreaseCardHealth(r, 2);
+			
+			// Name of the minion being healed 
+			std::string minionHealed = friendlyField[r]->GetName();
 
 			std::cout << "Bless heals " << minionHealed << "... ";
-			std::cout << minionHealed << " health now : " << friendlyMinions[r]->GetHealth() << std::endl;
+			std::cout << minionHealed << " health now : " << friendlyField[r]->GetHealth() << std::endl;
 		}
 	}
 }
 
-void CGame::CastHorde(int f)
+void CGame::CastHorde()
 {
-	Deck friendlyField = players[f]->GetField();
-	int ratCount = 0;
+	// Refresh the friendly field
+	friendlyField = players[friendlyIndex]->GetField();
 
-	for (size_t i = 0; i < friendlyField.size(); i++)
+	// Refresh the size of the friendly field
+	friendlyFieldSize = friendlyField.size();
+
+	// Sores the number of rats on the field
+	int hordeCount = 0;
+
+	// Loop through and check the field for cards with horde special ability
+	for (size_t i = 0; i < friendlyFieldSize; i++)
 	{
-		if (friendlyField[i]->GetType() == 7)
+		if (friendlyField[i]->GetSpecialAbility() == horde)
 		{
-			ratCount++;
+			hordeCount++;
 		}
 	}
-	for (size_t i = 0; i < friendlyField.size(); i++)
+	// Loop through and increase the attack of any cards with horde, when is more than one on the field
+	for (size_t i = 0; i < friendlyFieldSize; i++)
 	{
-		if (friendlyField[i]->GetType() == 7 && ratCount > 1)
+		if (friendlyField[i]->GetSpecialAbility() == horde && hordeCount > 1)
 		{
-			players[f]->IncreaseCardAttack(i, 1);
+			players[friendlyIndex]->IncreaseCardAttack(i, 1);
 			std::cout << friendlyField[i]->GetName() << " increases it's attack by one" << std::endl;
-			friendlyField = players[f]->GetField();
 		}
 	}
 }
 
-void CGame::CastTrample(int i, int f, int enemy, int attackDammage)
+void CGame::CastTrample(int i)
 {
-	Deck friendlyField = players[f]->GetField();
-	std::string attackingMinionName = friendlyField[i]->GetName();
-	int efsize = players[enemy]->GetField().size() - 1;
-	int r = CRandom::Random(efsize);
-	Deck enemyField = players[enemy]->GetField();
-	std::string enemyName = players[enemy]->GetName();
-	std::string friendlyName = players[f]->GetName();
+	// Refresh what is on the friendly field
+	friendlyField = players[friendlyIndex]->GetField();
 
-	if (efsize <= 0) /// game over condtion needed
+	// The name of the attacking minion
+	attackingMinionName = friendlyField[i]->GetName();
+
+	// Refresh what is on the enemy field
+	enemyField = players[enemyIndex]->GetField();
+
+	// Refresh the size of the enemy field
+	enemyFieldSize = enemyField.size();
+
+	// Generate a random number between 0 and the size of the enemy field
+	r = CRandom::Random(enemyFieldSize - 1);
+
+	// Refresh who is the enemy player
+	enemyPlayerName = players[enemyIndex]->GetName();
+
+	// Refresh who is the friendly player
+	friendlyPlayerName = players[friendlyIndex]->GetName();
+
+	// If the enemy has no cards on the field, attack the player
+	if (enemyFieldSize <= 0) 
 	{
-		players[enemy]->ReducePlayerHealth(attackDammage);
-		if (players[enemy]->GetHealthPoints() <= 0)
+		// Reducing the enemy players health
+		players[enemyIndex]->ReducePlayerHealth(attackDammage);
+
+		// If the enemy is dead, end the game
+		if (players[enemyIndex]->GetHealthPoints() <= 0)
 		{
 
-			std::cout << attackingMinionName << " attacks " << enemyName << "... ";
-			std::cout << enemyName << " has been killed." << std::endl << std::endl;
-			std::cout << friendlyName << ", you win!" << std::endl; // end game
+			std::cout << attackingMinionName << " attacks " << enemyPlayerName << "... ";
+			std::cout << enemyPlayerName << " has been killed." << std::endl << std::endl;
+			std::cout << friendlyPlayerName << ", you win!" << std::endl; // end game
 			return;
 		}
 		else
 		{
-			std::cout << attackingMinionName << " attacks " << enemyName << "... ";
-			std::cout << enemyName << " health now : " << players[enemy]->GetHealthPoints() << std::endl;
+			std::cout << attackingMinionName << " attacks " << enemyPlayerName << "... ";
+			std::cout << enemyPlayerName << " health now : " << players[enemyIndex]->GetHealthPoints() << std::endl;
 		}
 	}
+	// If the enemy has cards on the field, attack them
 	else
 	{
-		std::string minionUnderAttack = enemyField[r]->GetName();
-		int minionUnderAttackHealth = enemyField[r]->GetHealth();
-		players[enemy]->ReduceCardHealth(r, attackDammage);
+		// Refresh the minion under attack
+		minionUnderAttack = enemyField[r]->GetName();
+
+		// Refresh the health of that minion
+		minionUnderAttackHealth = enemyField[r]->GetHealth();
+
+		// Dammage that minion 
+		players[enemyIndex]->ReduceCardHealth(r, attackDammage);
+
+		// Recalculate attack dammage
 		attackDammage -= minionUnderAttackHealth;
+
+		//  If the minion dies 
 		if (enemyField[r]->GetHealth() <= 0)
 		{
-			players[enemy]->DeleteFromField(r);
+			// Delete the minion from the field
+			players[enemyIndex]->DeleteFromField(r);
 			std::cout << attackingMinionName << " attacks " << minionUnderAttack << "... ";
 			std::cout << minionUnderAttack << " has been killed." << std::endl;
+
+			// Look to attack again
 			if (attackDammage > 0)
 			{
-				CastTrample(i, f, enemy, attackDammage);
+				CastTrample(i);
 			}
 		}
+		// If the minion doesnt die
 		else
 		{
 			std::cout << attackingMinionName << " attacks " << minionUnderAttack << "... ";
@@ -496,43 +644,59 @@ void CGame::CastTrample(int i, int f, int enemy, int attackDammage)
 	}
 }
 
-void CGame::CastSword(int f)
+void CGame::CastSword()
 {
-	players[f]->DeleteFromField(players[f]->GetField().size() - 1);
-	int n = players[f]->GetField().size() - 1;
-	int r = CRandom::Random(n);
-	int fieldSize = players[f]->GetField().size();
-	Deck friendlyField = players[f]->GetField();
+	// Delete Armour from field as soon as it's played
+	players[friendlyIndex]->DeleteFromField(players[friendlyIndex]->GetField().size() - 1);
 
-	if (fieldSize > 0)
+	// Refresh who is in the friendly field
+	friendlyField = players[friendlyIndex]->GetField();
+
+	// Refresh the friendly field size
+	friendlyFieldSize = players[friendlyIndex]->GetField().size();
+
+	// Generate a random number between 0 and friendly Field Size
+	int r = CRandom::Random(friendlyFieldSize - 1);
+
+	// If there are cards on the friendly field, increase their atack and output it
+	if (friendlyFieldSize > 0)
 	{
-		players[f]->IncreaseCardAttack(r, 2);
+		players[friendlyIndex]->IncreaseCardAttack(r, 2);
 		std::cout << "Sword increases " << friendlyField[r]->GetName() << "'s attack by by 2" << std::endl;
 	}
+	// If there are no cards on the friendly field, increase the players health and output it
 	else 
 	{
-		players[f]->IncreasePlayerHealth(2);
-		std::cout << "Sword heals " << players[f]->GetName() << " by 2" << std::endl;
+		players[friendlyIndex]->IncreasePlayerHealth(2);
+		std::cout << "Sword heals " << players[friendlyIndex]->GetName() << " by 2" << std::endl;
 	}
 }
 
-void CGame::CastArmour(int f)
+void CGame::CastArmour()
 {
-	players[f]->DeleteFromField(players[f]->GetField().size() - 1);
-	int n = players[f]->GetField().size() - 1;
-	int r = CRandom::Random(n);
-	int fieldSize = players[f]->GetField().size();
-	Deck friendlyField = players[f]->GetField();
+	// Delete Armour from field as soon as it's played
+	players[friendlyIndex]->DeleteFromField(players[friendlyIndex]->GetField().size() - 1);
 
-	if (fieldSize > 0)
+	// Refresh which cards are on the frieldly field 
+	friendlyField = players[friendlyIndex]->GetField();
+
+	// find how many cards are on the friendly field
+	friendlyFieldSize = players[friendlyIndex]->GetField().size();
+
+	// Generate a random number between 0 and n
+	r = CRandom::Random(friendlyFieldSize - 1);
+
+	// If there are cards on the friendly field, increase their protection and output it
+	if (friendlyFieldSize > 0)
 	{
-		players[f]->IncreaseCardProtection(r, 2);
+		players[friendlyIndex]->IncreaseCardProtection(r, 2);
 		std::cout << "Armour increases " << friendlyField[r]->GetName() << "'s protection by 2" << std::endl;
 	}
+	// If there are no cards on the friendly field, increase the players health and output it
 	else
 	{
-		players[f]->IncreasePlayerHealth(2);
-		std::cout << "Armour heals " << players[f]->GetName() << " by 2" << std::endl;
+		players[friendlyIndex]->IncreasePlayerHealth(2);
+		std::cout << "Armour heals " << players[friendlyIndex]->GetName() << " by 2" << std::endl;
 	}
 }
 

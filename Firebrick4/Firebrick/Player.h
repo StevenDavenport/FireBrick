@@ -23,7 +23,6 @@ public:
 	void Draw();
 	int PlayCard();
 	Deck GetField();
-	std::vector<std::string> GetHand();
 	void ReducePlayerHealth(int x);
 	void ReduceCardHealth(int i, int x);
 	void IncreasePlayerHealth(int x);
@@ -34,7 +33,6 @@ public:
 	void SetUpDeck(std::string filename);
 	void ReadInCards(std::string (&cards)[100], std::string filename);
 	void ShuffleDeck();
-	int Random(const float n);
 
 private:
 	//friend class CGame;

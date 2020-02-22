@@ -4,6 +4,8 @@
 CPlayer::CPlayer(std::string name, std::string filename, std::string shuffle) : name(name)
 {
 	SetUpDeck(filename);
+	
+	//If the player wants to shuffle, call shuffle
 	if (shuffle == "y" || shuffle == "Y")
 	{
 		ShuffleDeck();
@@ -18,13 +20,17 @@ CPlayer::CPlayer(std::string name) : name(name) {} // test constructor
 
 void CPlayer::SetUpDeck(std::string filename)
 {
+	// Read in the cards
 	std::string cards[100];
 	ReadInCards(cards, filename);
 
+	// Loop through cards
 	for (int i = 0; i < 100; i++)
 	{
+		// If the first character is not nothing
 		if (cards[i][0] != *"")
 		{
+			// Variables taken from the strings in the array, used in the switch statments
 			char type[3] = { cards[i][0], cards[i][1], cards[i][2] };
 
 			switch (type[0])
@@ -156,11 +162,6 @@ void CPlayer::ShuffleDeck()
 	}
 }
 
-int CPlayer::Random(const float n)
-{
-	return 0;
-}
-
 int CPlayer::GetHealthPoints()
 {
 	return healthPoints;
@@ -172,25 +173,33 @@ Deck CPlayer::GetDeck()
 }
 void CPlayer::FDraw()
 {
+	// Put a drawn card into the hand
 	hand.push_back(deck[deck.size() - 1]);
 	std::cout << name << " begins with " << deck[deck.size() - 1]->GetName() << std::endl;
+	// Delete the drawn card from the deck
 	deck.pop_back();
 }
 
 
 void CPlayer::Draw()
 {
+	// Put a drawn card into the hand
 	hand.push_back(deck[deck.size() - 1]);
 	std::cout << name << " draws " << deck[deck.size() - 1]->GetName() << std::endl;
+	// Delete the drawn card from the deck
 	deck.pop_back();
 }
 
 int CPlayer::PlayCard()
 {
+	// Pick a random card in the hand to play
 	int r = CRandom::Random(hand.size() - 1);
+	// Play that card to the field
 	field.push_back(hand[r]);
 	std::cout << name << " plays " << hand[r]->GetName() << std::endl;
+	// Erase from hand
 	hand.erase(hand.begin() + r);
+	// Return the played cards special ability
 	return field[field.size() - 1]->GetSpecialAbility();
 }
 
@@ -204,16 +213,6 @@ std::string CPlayer::GetName()
 	return name;
 }
 
-std::vector<std::string> CPlayer::GetHand()
-{
-	std::vector<std::string> cardsInHand;
-	for (size_t i = 0; i < hand.size(); i++)
-	{
-		//cardsInHand.push_back(hand[i]->GetName());
-	}
-	return cardsInHand;
-}
-
 void CPlayer::ReducePlayerHealth(int x)
 {
 	healthPoints -= x;
@@ -221,14 +220,7 @@ void CPlayer::ReducePlayerHealth(int x)
 
 void CPlayer::ReduceCardHealth(int i, int x)
 {
-	if (field[i]->GetProtection() <= 0)
-	{
-		field[i]->ReduceHealth(x);
-	}
-	else
-	{
-		field[i]->ReduceHealth(x - field[i]->GetProtection());
-	}
+	field[i]->ReduceHealth(x - field[i]->GetProtection());
 }
 
 void CPlayer::IncreasePlayerHealth(int x)
