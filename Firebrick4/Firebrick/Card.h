@@ -8,20 +8,22 @@
 class CCard
 {
 public:
-	CCard(int type, std::string name);
-	int GetType();
-	std::string GetName();
-	int GetProtection();
-	void IncreaseProtection(int x);
-	virtual int GetAttack() = 0;
-	virtual int GetHealth() = 0;
-	virtual int GetSpecialAbility() = 0;
-	virtual void ReduceHealth(int x) = 0;
-	virtual void IncreaseHealth(int x) = 0;
-	virtual void IncreaseAttack(int x) = 0;
+	CCard(const int& type, const std::string& name);// Constructor
+	int GetType();									// Getter
+	
+	std::string GetName();							// Getter
+	int GetProtection();							// Getter
+	void IncreaseProtection(const int& x);			// Setter
+	virtual int GetAttack() = 0;					// Virtual Getter
+	virtual int GetHealth() = 0;					// Virtual Getter
+	virtual int GetSpecialAbility() = 0;			// Virtual Getter
+	virtual void ReduceHealth(const int& x) = 0;	// Virtual Setter
+	virtual void IncreaseHealth(const int& x) = 0;	// Virtual Setter
+	virtual void IncreaseAttack(const int& x) = 0;	// Virtual Setter
+													
+private:				
+	int mType = -1;									// Variable that stores the type of the card object
+	std::string mName;								// Variable that stores the name of the card object
+	int mProtection = 0;							// Variable that stores the protection of the card object
 
-private:
-	int type = -1;
-	std::string name;
-	int protection = 0;
 };

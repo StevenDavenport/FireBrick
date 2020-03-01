@@ -1,4 +1,8 @@
 #include "pch.h"
+//
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -6,26 +10,21 @@
 
 int main()
 {
-	std::unique_ptr<CGame> Game = std::make_unique<CGame>();
-	Game->Play();
 
+	_CrtDumpMemoryLeaks();
+
+
+	// Create the game object
+	std::unique_ptr<CGame> pGame = std::make_unique<CGame>();
+	
+	// Play the game
+	pGame->Play();
+
+	// Check for memory leaks
+	//_CrtDumpMemoryLeaks();
+
+	// Pause before closing
 	system("pause");
 }
- 
 
-////-------- TODO: --------////
-
-/*
-	- Test and Debug
-		- make test function or class.
-
-	- #ifndef / #define
-
-	- Check if constants could be used
-
-	- Memory leaks
-		- Use livrary that checks for them / pretty sure their is none.
-
-	- Comment / refacter make it pretty / Style guide
-		- zzZZZ
-*/
+// Memory leaks --- card drawn order

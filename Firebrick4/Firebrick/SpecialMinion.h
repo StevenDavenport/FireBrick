@@ -1,13 +1,14 @@
 #pragma once
 #include "Minion.h"
 
-class CSpecialMinion : public CMinion
+class CSpecialMinion : public CMinion					      // Special minion is a type of minion card
 {
-public:
-	CSpecialMinion(int type, std::string name, int attack, int health, int specialAbility);
-	int GetSpecialAbility();
+public:																			   // Constructor
+	CSpecialMinion(const int& type, const std::string& name, 
+		const int& attack, const int& health, const int& specialAbility);
+	int GetSpecialAbility(); 										// Getter
 
 private:
-	int specialAbility = none;
+	int mSpecialAbility = none;										// Stores a special ability property
 };
 

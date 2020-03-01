@@ -1,26 +1,26 @@
 #include "pch.h"
 #include "Card.h"
 
-CCard::CCard(int type, std::string name) : type(type), name(name) 
-{
-}
+CCard::CCard(const int& type, const std::string& name) : mType(type), mName(name) {}
 
 int CCard::GetType()
 {
-	return type;
+	return mType;
 }
 
 std::string CCard::GetName()
 {
-	return name;
+	return mName;
 }
 
 int CCard::GetProtection()
 {
-	return protection;
+	return mProtection;
 }
 
-void CCard::IncreaseProtection(int x)
+void CCard::IncreaseProtection(const int& x)
 {
-	protection += x;
+	mProtection += x;
 }
+
+

@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Minion.h"
 
-CMinion::CMinion(int type, std::string name, int attack, int health) 
-	: CCard(type, name), attack(attack), health(health)
+CMinion::CMinion(const int& type, const std::string& name, const int& attack, const int& health)
+	: CCard(type, name), mAttack(attack), mHealth(health)
 {
 }
 
@@ -13,25 +13,25 @@ int CMinion::GetSpecialAbility()
 
 int CMinion::GetAttack()
 {
-	return attack;
+	return mAttack;
 }
 
 int CMinion::GetHealth()
 {
-	return health;
+	return mHealth;
 }
 
-void CMinion::ReduceHealth(int x)
+void CMinion::ReduceHealth(const int& x)
 {
-	health -= x;
+	mHealth -= x;
 }
 
-void CMinion::IncreaseHealth(int x)
+void CMinion::IncreaseHealth(const int& x)
 {
-	health += x;
+	mHealth += x;
 }
 
-void CMinion::IncreaseAttack(int x)
+void CMinion::IncreaseAttack(const int& x)
 {
-	attack += x;
+	mAttack += x;
 }

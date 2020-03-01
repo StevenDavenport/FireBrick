@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Spell.h"
 
-CSpell::CSpell(int type, std::string name, int specialAbility)
-	: CCard(type, name), specialAbility(specialAbility)
+CSpell::CSpell(const int& type, const std::string& name, const int& specialAbility)
+	: CCard(type, name), mSpecialAbility(specialAbility)
 {
 }
 
@@ -18,17 +18,17 @@ int CSpell::GetHealth()
 
 int CSpell::GetSpecialAbility()
 {
-	return specialAbility;
+	return mSpecialAbility;
 }
 
-void CSpell::ReduceHealth(int x)
+void CSpell::ReduceHealth(const int& x)
 {
 }
 
-void CSpell::IncreaseHealth(int x)
+void CSpell::IncreaseHealth(const int& x)
 {
 }
 
-void CSpell::IncreaseAttack(int x)
+void CSpell::IncreaseAttack(const int& x)
 {
 }

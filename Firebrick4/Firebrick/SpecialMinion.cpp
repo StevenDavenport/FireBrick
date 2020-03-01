@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "SpecialMinion.h"
 
-CSpecialMinion::CSpecialMinion(int type, std::string name, int attack, int health, int specialAbility)
-	: CMinion(type, name, attack, health), specialAbility(specialAbility)
+CSpecialMinion::CSpecialMinion(const int& type, const std::string& name,
+	const int& attack, const int& health, const int& specialAbility)
+	: CMinion(type, name, attack, health), mSpecialAbility(specialAbility)
 {
 }
 
 int CSpecialMinion::GetSpecialAbility()
 {
-	return specialAbility;
+	return mSpecialAbility;
 }

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Equipment.h"
 
-CEquipment::CEquipment(int type, std::string name, int specialAbility)
+CEquipment::CEquipment(const int& type, const std::string& name, const int& specialAbility)
 	: CSpell(type, name, specialAbility)
 {
 }
@@ -16,15 +16,15 @@ int CEquipment::GetHealth()
 	return 0;
 }
 
-void CEquipment::ReduceHealth(int x)
+void CEquipment::ReduceHealth(const int& x)
 {
 }
 
-void CEquipment::IncreaseHealth(int x)
+void CEquipment::IncreaseHealth(const int& x)
 {
 }
 
-void CEquipment::IncreaseAttack(int x)
+void CEquipment::IncreaseAttack(const int& x)
 {
 }
 
