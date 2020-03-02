@@ -1,8 +1,5 @@
 #pragma once
 #include "pch.h"
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-//
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -11,12 +8,12 @@
 #include "SpecialMinion.h"
 #include "Equipment.h"
 #include "Random.h"
+#include "MockCard.h"
 
 // Type redefinitions 
-typedef std::vector<std::shared_ptr<CCard>> sharedList;
-typedef std::vector<std::weak_ptr<CCard>> weakList;
-typedef std::weak_ptr<CCard>  weakCard;
 typedef std::vector<std::string> List;
+typedef std::vector<MockCard> MockDeck;
+typedef std::vector<std::unique_ptr<CCard>> Deck;
 
 class CPlayer															 // Used per player
 {
@@ -27,9 +24,8 @@ public:
 	void FDraw();														  // First draw of the game
 	void Draw();														  // Called to draw cards
 	int PlayCard();														  // Plays a card to the table
-	weakList GetField();												  // Getter
+	MockDeck GetField();												  // Getter
 	int GetFieldSize();													  // Getter
-	weakCard GetCard(const int& i);								    	  // Getter
 	void ReducePlayerHealth(const int& x);								  // Setter
 	void ReduceCardHealth(const int& i, const int& x);					  // Setter
 	void IncreasePlayerHealth(const int& x);							  // Setter
@@ -43,11 +39,11 @@ public:
 																		   
 private:																   
 	std::string mFilename;												  // Stores a filename
-	sharedList mUnshuffledDeck;											  // Deck before shuffle
-	sharedList mDeck;													  // Deck after shuffle
+	Deck mUnshuffledDeck;												  // Deck before shuffle
+	Deck mDeck;														      // Deck after shuffle
 	List mCards;														  // Read into this list										  // Deck after shuffle
-	sharedList mHand;													  // Hand of player
-	sharedList mField;													  // Field of player
+	Deck mHand;														      // Hand of player
+	Deck mField;														  // Field of player
 	std::string mName;													  // Name of player
 	int mHealthPoints = 30;												  // Health of player
 };

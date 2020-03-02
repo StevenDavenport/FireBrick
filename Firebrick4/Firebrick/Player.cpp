@@ -13,7 +13,7 @@ CPlayer::CPlayer(const std::string& name, const std::string& filename, const std
 	}
 	else
 	{
-		mDeck = mUnshuffledDeck;
+		mDeck = std::move(mUnshuffledDeck);
 	}
 }
 
@@ -37,48 +37,48 @@ void CPlayer::SetUpDeck()
 				switch (mType[1])
 				{
 				case '0':				// mType 10
-					mUnshuffledDeck.push_back(std::make_shared<CEquipment>(10, "Sword", sword));
+					mUnshuffledDeck.push_back(std::make_unique<CEquipment>(10, "Sword", sword));
 					break;
 
 				case '1':				// mType 11
-					mUnshuffledDeck.push_back(std::make_shared<CEquipment>(11, "Armour", armour));
+					mUnshuffledDeck.push_back(std::make_unique<CEquipment>(11, "Armour", armour));
 					break;
 
 				case ' ':				// mType 1
 					switch (mType[2])
 					{
 					case 'O':
-						mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Orc", 2, 2));
+						mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Orc", 2, 2));
 						break;
 
 					case 'G':
-						mCards[i][3] == 'o' ? mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Goblin", 2, 1))
-							: mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Giant", 4, 4));
+						mCards[i][3] == 'o' ? mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Goblin", 2, 1))
+							: mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Giant", 4, 4));
 						break;
 
 					case 'P':
-						mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Pooka", 2, 4));
+						mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Pooka", 2, 4));
 						break;
 
 					case 'T':
-						mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Thorns", 1, 4));
+						mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Thorns", 1, 4));
 						break;
 
 					case 'D':
-						mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Dwarf", 2, 4));
+						mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Dwarf", 2, 4));
 						break;
 
 					case 'C':
-						mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Cannon", 4, 1));
+						mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Cannon", 4, 1));
 						break;
 
 					case 'S':
-						mCards[i][3] == 'w' ? mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Swordswinger", 2, 2))
-							: mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Spearcarrier", 2, 1));
+						mCards[i][3] == 'w' ? mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Swordswinger", 2, 2))
+							: mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Spearcarrier", 2, 1));
 						break;
 
 					case 'E':
-						mUnshuffledDeck.push_back(std::make_shared<CMinion>(1, "Elf", 1, 4));
+						mUnshuffledDeck.push_back(std::make_unique<CMinion>(1, "Elf", 1, 4));
 						break;
 
 					default:
@@ -93,42 +93,42 @@ void CPlayer::SetUpDeck()
 				break;
 				
 			case '2':				// mType 2
-				mUnshuffledDeck.push_back(std::make_shared<CSpell>(2, "Fireball", fireball));
+				mUnshuffledDeck.push_back(std::make_unique<CSpell>(2, "Fireball", fireball));
 				break;
 
 			case '3':				// mType 3
-				mUnshuffledDeck.push_back(std::make_shared<CSpell>(3, "Lightning", lightning));
+				mUnshuffledDeck.push_back(std::make_unique<CSpell>(3, "Lightning", lightning));
 				break;
 
 			case '4':				// mType 4
-				mUnshuffledDeck.push_back(std::make_shared<CSpell>(4, "Bless", bless));
+				mUnshuffledDeck.push_back(std::make_unique<CSpell>(4, "Bless", bless));
 				break;
 
 			case '5':				// mType 5
-				mUnshuffledDeck.push_back(std::make_shared<CSpecialMinion>(5, "Vampire", 2, 3, vampire));
+				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(5, "Vampire", 2, 3, vampire));
 				break;
 
 			case '6':				// mType 6
-				mUnshuffledDeck.push_back(std::make_shared<CSpecialMinion>(6, "Wall", 0, 6, wall));
+				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(6, "Wall", 0, 6, wall));
 				break;
 
 			case '7':				// mType 7
-				mUnshuffledDeck.push_back(std::make_shared<CSpecialMinion>(7, "Rat", 1, 2, horde));
+				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(7, "Rat", 1, 2, horde));
 				break;
 
 			case '8':				// mType 8
 				if (mType[2] == 'E')
 				{
-					mUnshuffledDeck.push_back(std::make_shared<CSpecialMinion>(8, "Elephant", 3, 6, trample));
+					mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(8, "Elephant", 3, 6, trample));
 				}
 				else
 				{
-					mUnshuffledDeck.push_back(std::make_shared<CSpecialMinion>(8, "Dragon", 3, 6, trample));
+					mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(8, "Dragon", 3, 6, trample));
 				}
 				break;
 
 			case '9':				// mType 9
-				mUnshuffledDeck.push_back(std::make_shared<CSpecialMinion>(9, "Leech", 2, 2, leech));
+				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(9, "Leech", 2, 2, leech));
 				break;
 
 			default:
@@ -179,8 +179,8 @@ int CPlayer::GetHealthPoints()
 void CPlayer::FDraw()
 {
 	// Put a drawn card into the hand
-	mHand.push_back(mDeck[mDeck.size() - 1]);
 	std::cout << mName << " begins with " << mDeck[mDeck.size() - 1]->GetName() << std::endl;
+	mHand.push_back(std::move(mDeck[mDeck.size() - 1]));
 
 	// Delete the drawn card from the mList
 	mDeck.pop_back();
@@ -190,8 +190,8 @@ void CPlayer::FDraw()
 void CPlayer::Draw()
 {
 	// Put a drawn card into the hand
-	mHand.push_back(mDeck[mDeck.size() - 1]);
 	std::cout << mName << " draws " << mDeck[mDeck.size() - 1]->GetName() << std::endl;
+	mHand.push_back(std::move(mDeck[mDeck.size() - 1]));
 
 	// Delete the drawn card from the mList
 	mDeck.pop_back();
@@ -203,8 +203,8 @@ int CPlayer::PlayCard()
 	int r = CRandom::Random(mHand.size() - 1);
 
 	// Play that card to the field
-	mField.push_back(mHand[r]);
 	std::cout << mName << " plays " << mHand[r]->GetName() << std::endl;
+	mField.push_back(std::move(mHand[r]));
 
 	// Erase from hand
 	mHand.erase(mHand.begin() + r);
@@ -213,24 +213,35 @@ int CPlayer::PlayCard()
 	return mField[mField.size() - 1]->GetSpecialAbility();
 }
 
-weakList CPlayer::GetField()
+MockDeck CPlayer::GetField()
 {
-	weakList tempList;
+	// Create a fake field to return
+	MockDeck fakeField;
+
+	// Loop through the field
 	for (size_t i = 0; i < mField.size(); i++)
 	{
-		tempList.push_back(GetCard(i));
+		// Create a mock card to add to the fake field
+		MockCard fakeCard;
+
+		// Populate the fake cards values with the card (index) 
+		fakeCard.type = mField[i]->GetType();
+		fakeCard.name = mField[i]->GetName();
+		fakeCard.attack = mField[i]->GetAttack();
+		fakeCard.health = mField[i]->GetHealth();
+		fakeCard.specialAbility = mField[i]->GetSpecialAbility();
+		fakeCard.protection = mField[i]->GetProtection();
+
+		// Put the fake card in the fake field
+		fakeField.push_back(fakeCard);
 	}
-	return tempList;
+
+	return fakeField;
 }
 
 int CPlayer::GetFieldSize()
 {
 	return mField.size();
-}
-
-weakCard CPlayer::GetCard(const int& i)
-{
-	return mField[i];
 }
 
 std::string CPlayer::GetName()

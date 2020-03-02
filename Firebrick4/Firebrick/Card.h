@@ -10,7 +10,6 @@ class CCard
 public:
 	CCard(const int& type, const std::string& name);// Constructor
 	int GetType();									// Getter
-	
 	std::string GetName();							// Getter
 	int GetProtection();							// Getter
 	void IncreaseProtection(const int& x);			// Setter

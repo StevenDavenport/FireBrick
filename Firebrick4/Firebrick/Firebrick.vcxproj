@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Card.h" />
+    <ClInclude Include="MockCard.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Minion.h" />
     <ClInclude Include="SpecialAbilities.h" />
