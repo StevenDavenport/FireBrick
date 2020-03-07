@@ -50,7 +50,7 @@ void CGame::Play()
 void CGame::RoundZero()
 {
 	// Publishing message
-	std::cout<< "SLDavenport FireBrick>\n\n";
+	std::cout<< "SLDavenport FireBrick\n\n";
 
 	// Loop through each player
 	for (int i = 0; i < 2; i++)
@@ -58,6 +58,7 @@ void CGame::RoundZero()
 		// Each player draws a card
 		mPlayers[i]->FirstDraw();
 	}
+	std::cout << std::endl;
 	// Increase round count
 	mRoundCount++;
 }
@@ -66,7 +67,7 @@ void CGame::RoundZero()
 void CGame::Round()
 {
 	// Round statment  
-	std::cout << std::endl << "Round " << mRoundCount << std::endl;
+	std::cout << "Round " << mRoundCount << std::endl;
 
 	// Loops through each player
 	for (mFriendlyIndex = 0; mFriendlyIndex < 2; mFriendlyIndex++)
@@ -111,7 +112,6 @@ void CGame::Turn()
 
 	// Attacking Phase
 	mPlayers[mFriendlyIndex]->Attack(mPlayers[mFriendlyIndex], mPlayers[mEnemyIndex]);
-	std::cout << std::endl;
 
 	// Game over checker
 	if (CheckGameOver() == true)
@@ -119,6 +119,7 @@ void CGame::Turn()
 		// Stop the game
 		return;
 	}
+	std::cout << "\n";
 }
 
 // Game over checker function

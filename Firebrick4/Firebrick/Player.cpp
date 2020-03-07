@@ -182,7 +182,7 @@ void CPlayer::FirstDraw()
 	std::string name = mDeck[0]->GetName();
 
 	// Put a drawn card into the hand
-	std::cout << mName << " begins with " << name << std::endl;
+	std::cout << mName << " begins with " << name << "\n";
 	mHand.push_back(std::move(mDeck[0]));
 
 	// Delete the drawn card from the mList
