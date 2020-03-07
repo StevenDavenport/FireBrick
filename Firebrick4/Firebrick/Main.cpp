@@ -15,5 +15,3 @@ int main()
 	// Pause before closing
 	system("pause");
 }
-
-// card drawn order

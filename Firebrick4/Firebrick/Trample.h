@@ -1,26 +1,22 @@
 #pragma once
 #include "Minion.h"
+#include "Player.h"
 
 class CTrample : public CMinion
 {
 public:
-	CTrample(std::string name);
-	int GetType();
-	std::string GetName();
-	int GetAttack();
-	int GetHealth();
-	int GetSpecialAbility();
-	void ReduceHealth(int x);
-	void IncreaseHealth(int x);
-	void IncreaseAttack(int x);
-	void IncreaseProtection(int x);
-	int GetProtection();
+	// Constructor
+	CTrample(const int& type, const std::string& name, const int& attack, const int& health);
+
+	// Spell identifier
+	virtual const bool& IsSpell() override final;
+
+	// This cards attack function
+	virtual void Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer) override final;
 
 private:
-	int type = 8;
-	std::string name = "";
-	int attack = 3;
-	int health = 6;
-	int protection = 0;
+	const bool mSPELL = false;									  // Spell flag regoniser
+	const int mDEFAULT_ATTACK = 3;								  // Stores the origonal attack
+
 };
 

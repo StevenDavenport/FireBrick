@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player.h"
 
+typedef std::unique_ptr<CPlayer>& PlayerRef;
 
 CPlayer::CPlayer(const std::string& name, const std::string& filename, const std::string& shuffle)
 	: mName(name), mFilename(filename)
@@ -37,11 +38,11 @@ void CPlayer::SetUpDeck()
 				switch (mType[1])
 				{
 				case '0':				// mType 10
-					mUnshuffledDeck.push_back(std::make_unique<CEquipment>(10, "Sword", sword));
+					mUnshuffledDeck.push_back(std::make_unique<CSword>(10, "Sword"));
 					break;
 
 				case '1':				// mType 11
-					mUnshuffledDeck.push_back(std::make_unique<CEquipment>(11, "Armour", armour));
+					mUnshuffledDeck.push_back(std::make_unique<CArmour>(11, "Armour"));
 					break;
 
 				case ' ':				// mType 1
@@ -83,7 +84,6 @@ void CPlayer::SetUpDeck()
 
 					default:
 						break;
-
 					}
 					break;
 
@@ -91,44 +91,45 @@ void CPlayer::SetUpDeck()
 					break;
 				}
 				break;
-				
+
 			case '2':				// mType 2
-				mUnshuffledDeck.push_back(std::make_unique<CSpell>(2, "Fireball", fireball));
+
+				mUnshuffledDeck.push_back(std::make_unique<CFireball>(2, "Fireball", 3));
 				break;
 
 			case '3':				// mType 3
-				mUnshuffledDeck.push_back(std::make_unique<CSpell>(3, "Lightning", lightning));
+				mUnshuffledDeck.push_back(std::make_unique<CLightning>(3, "Lightning", 1));
 				break;
 
 			case '4':				// mType 4
-				mUnshuffledDeck.push_back(std::make_unique<CSpell>(4, "Bless", bless));
+				mUnshuffledDeck.push_back(std::make_unique<CBless>(4, "Bless", 2));
 				break;
 
 			case '5':				// mType 5
-				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(5, "Vampire", 2, 3, vampire));
+				mUnshuffledDeck.push_back(std::make_unique<CVampire>(5, "Vampire", 2, 3));
 				break;
 
 			case '6':				// mType 6
-				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(6, "Wall", 0, 6, wall));
+				mUnshuffledDeck.push_back(std::make_unique<CWall>(6, "Wall", 0, 6));
 				break;
 
 			case '7':				// mType 7
-				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(7, "Rat", 1, 2, horde));
+				mUnshuffledDeck.push_back(std::make_unique<CHorde>(7, "Rat", 1, 2));
 				break;
 
 			case '8':				// mType 8
 				if (mType[2] == 'E')
 				{
-					mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(8, "Elephant", 3, 6, trample));
+					mUnshuffledDeck.push_back(std::make_unique<CTrample>(8, "Elephant", 3, 6));
 				}
 				else
 				{
-					mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(8, "Dragon", 3, 6, trample));
+					mUnshuffledDeck.push_back(std::make_unique<CTrample>(8, "Dragon", 3, 6));
 				}
 				break;
 
 			case '9':				// mType 9
-				mUnshuffledDeck.push_back(std::make_unique<CSpecialMinion>(9, "Leech", 2, 2, leech));
+				mUnshuffledDeck.push_back(std::make_unique<CLeech>(9, "Leech", 2, 2));
 				break;
 
 			default:
@@ -137,7 +138,6 @@ void CPlayer::SetUpDeck()
 		}
 	}
 }
-
 
 void CPlayer::ReadInCards()
 {
@@ -157,7 +157,7 @@ void CPlayer::ReadInCards()
 		}
 	}
 	// Close file
-	inFile.close();	
+	inFile.close();
 }
 
 
@@ -176,72 +176,47 @@ int CPlayer::GetHealthPoints()
 	return mHealthPoints;
 }
 
-void CPlayer::FDraw()
+void CPlayer::FirstDraw()
 {
+	// Get the name of the card drawn
+	std::string name = mDeck[0]->GetName();
+
 	// Put a drawn card into the hand
-	std::cout << mName << " begins with " << mDeck[mDeck.size() - 1]->GetName() << std::endl;
-	mHand.push_back(std::move(mDeck[mDeck.size() - 1]));
+	std::cout << mName << " begins with " << name << std::endl;
+	mHand.push_back(std::move(mDeck[0]));
 
 	// Delete the drawn card from the mList
-	mDeck.pop_back();
+	mDeck.erase(mDeck.begin());
 }
-
 
 void CPlayer::Draw()
 {
+	// Get the name of the card drawn
+	std::string name = mDeck[0]->GetName();
+
 	// Put a drawn card into the hand
-	std::cout << mName << " draws " << mDeck[mDeck.size() - 1]->GetName() << std::endl;
-	mHand.push_back(std::move(mDeck[mDeck.size() - 1]));
+	std::cout << mName << " draws " << name << std::endl;
+	mHand.push_back(std::move(mDeck[0]));
 
 	// Delete the drawn card from the mList
-	mDeck.pop_back();
+	mDeck.erase(mDeck.begin());
 }
 
-int CPlayer::PlayCard()
+void CPlayer::PrintTable()
 {
-	// Pick a random card in the hand to play
-	int r = CRandom::Random(mHand.size() - 1);
+	std::string name;
+	int health = -1;
 
-	// Play that card to the field
-	std::cout << mName << " plays " << mHand[r]->GetName() << std::endl;
-	mField.push_back(std::move(mHand[r]));
-
-	// Erase from hand
-	mHand.erase(mHand.begin() + r);
-
-	// Return the played cards special ability
-	return mField[mField.size() - 1]->GetSpecialAbility();
-}
-
-MockDeck CPlayer::GetField()
-{
-	// Create a fake field to return
-	MockDeck fakeField;
-
-	// Loop through the field
+	// Prints both players fields to console window
+	std::cout << "Cards On Table: ";
 	for (size_t i = 0; i < mField.size(); i++)
 	{
-		// Create a mock card to add to the fake field
-		MockCard fakeCard;
+		health = mField[i]->GetHealth();
+		name = mField[i]->GetName();
 
-		// Populate the fake cards values with the card (index) 
-		fakeCard.type = mField[i]->GetType();
-		fakeCard.name = mField[i]->GetName();
-		fakeCard.attack = mField[i]->GetAttack();
-		fakeCard.health = mField[i]->GetHealth();
-		fakeCard.specialAbility = mField[i]->GetSpecialAbility();
-		fakeCard.protection = mField[i]->GetProtection();
-
-		// Put the fake card in the fake field
-		fakeField.push_back(fakeCard);
+		std::cout << name << " (" << health << ")  ";
 	}
-
-	return fakeField;
-}
-
-int CPlayer::GetFieldSize()
-{
-	return mField.size();
+	std::cout << std::endl;
 }
 
 std::string CPlayer::GetName()
@@ -249,37 +224,55 @@ std::string CPlayer::GetName()
 	return mName;
 }
 
-void CPlayer::ReducePlayerHealth(const int& x)
-{
-	mHealthPoints -= x;
-}
-
-void CPlayer::ReduceCardHealth(const int& i, const int& x)
-{
-	mField[i]->ReduceHealth(x - mField[i]->GetProtection());
-}
-
-void CPlayer::IncreasePlayerHealth(const int& x)
-{
-	mHealthPoints += x;
-}
-
-void CPlayer::IncreaseCardHealth(const int& i, const int& x)
-{
-	mField[i]->IncreaseHealth(x);
-}
-
-void CPlayer::IncreaseCardAttack(const int& i, const int& x)
-{
-	mField[i]->IncreaseAttack(x);
-}
-
-void CPlayer::IncreaseCardProtection(const int& i, const int& x)
-{
-	mField[i]->IncreaseProtection(x);
-}
-
-void CPlayer::DeleteFromField(const int& i)
+void CPlayer::RemoveCardFromField(const int& i)
 {
 	mField.erase(mField.begin() + i);
+}
+
+void CPlayer::ReduceHealth(const int& attackDammage)
+{
+	mHealthPoints -= attackDammage;
+}
+
+void CPlayer::IncreaseHealth(const int& heal)
+{
+	mHealthPoints += heal;
+}
+
+void CPlayer::PlayCard(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
+{
+	// Pick a random card in the hand to play
+	int r = CRandom::Random(mHand.size() - 1);
+
+	// Get the name of the card drawn
+	std::string name = mHand[r]->GetName();
+
+	// Play that card to the field
+	std::cout << mName << " plays " << name << std::endl;
+	mField.push_back(std::move(mHand[r]));
+
+	// Erase from hand
+	mHand.erase(mHand.begin() + r);
+
+	// Cast on play spell
+	if (mField[mField.size() - 1]->IsSpell() == true)
+	{
+		mField[mField.size() - 1]->Activate(friendlyPlayer, enemyPlayer);
+		if (enemyPlayer->GetHealthPoints() <= 0)
+		{
+			return;
+		}
+	}
+}
+
+void CPlayer::Attack(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
+{
+	for (size_t i = 0; i < mField.size(); i++)
+	{
+		mField[i]->Activate(friendlyPlayer, enemyPlayer);
+		if (enemyPlayer->GetHealthPoints() <= 0)
+		{
+			return;
+		}
+	}
 }

@@ -1,19 +1,40 @@
 #pragma once
 #include "Card.h"
 
-class CSpell : public CCard									 // A spell is a type of card
+class CSpell : public CCard
 {
 public:
-	CSpell(const int& type, const std::string& name, const int& specialAbility);  // Constructor
-	int GetAttack();										 // Getter
-	int GetHealth();										 // Getter
-	int GetSpecialAbility();								 // Getter
-	void ReduceHealth(const int& x);						 // Setter
-	void IncreaseHealth(const int& x);						 // Setter
-	void IncreaseAttack(const int& x);						 // Setter
-															 
-private:													  
-	int mSpecialAbility = none;								 // Special ability value of the card
+	// Constructor
+	CSpell(const int& type, const std::string& name, const int& attack);
+
+	// Spell identifier
+	const bool& IsSpell() override final;
+
+	// Getter for mHealth
+	virtual int& GetHealth() override final;
+
+	// Setter for mHealth
+	virtual void ReduceHealth(const int& attackDammage) override final;
+
+	// Setter for mHealth
+	virtual void IncreaseHealth(const int& heal) override final;
+
+	// Getter for mAttack
+	virtual int& GetAttack() override final;
+
+	// Setter for mAttack
+	virtual void IncreaseAttack(const int& x) override final;
+
+	// Setter for mAttack
+	virtual void SetAttack(const int& x) override final;
+
+	// Activates a card
+	virtual void Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer) override = 0;
+
+private:
+	int mAttack = -1;				// Attack of the card
+	int mHealth = 0;				// Health of the card
+	bool mSpell = true;			    // Spell flag regoniser
 
 };
 

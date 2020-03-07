@@ -1,49 +1,60 @@
 #include "pch.h"
 #include "Bless.h"
+#include "Player.h"
 
-int CBless::GetType()
-{
-	return type;
-}
+CBless::CBless(const int& type, const std::string& name, const int& attack)
+	: CSpell(type, name, attack) {}
 
-std::string CBless::GetName()
+void CBless::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 {
-	return name;
-}
+	// Generate a random number
+	int r = CRandom::Random(enemyPlayer->mField.size() + friendlyPlayer->mField.size());
 
-int CBless::GetAttack()
-{
-	return attack;
-}
+	// Attack enemy minion
+	if (r < enemyPlayer->mField.size())
+	{
+		// Dammage the minion
+		enemyPlayer->mField[r]->ReduceHealth(GetAttack());
 
-int CBless::GetHealth()
-{
-	return 0;
-}
+		// Console output
+		CCard::ConsoleOutput(this->GetName(), enemyPlayer->mField[r]->GetName(),
+			enemyPlayer->mField[r]->GetHealth());
 
-int CBless::GetSpecialAbility()
-{
-	return specialAbility;
-}
+		// the minion under attack is killed
+		if (enemyPlayer->mField[r]->GetHealth() <= 0)
+		{
+			enemyPlayer->RemoveCardFromField(r);
+		}
+	}
+	// Attack enemy player
+	else if (r == enemyPlayer->mField.size())
+	{
+		// Reduce the enemy mPlayers health 
+		enemyPlayer->ReduceHealth(GetAttack());
+		
+		// Console output
+		CCard::ConsoleOutput(this->GetName(), enemyPlayer->GetName(), enemyPlayer->GetHealthPoints());
+	}
+	// Heal friendly minion
+	else if (r < enemyPlayer->mField.size() + friendlyPlayer->mField.size() - 1)
+	{
+		// Increase the health of a friendly minion
+		friendlyPlayer->mField[r]->IncreaseHealth(mHEALS);
+	}
+	// Heal friendly player
+	else
+	{
+		// Ignore bless on field
+		if (r == enemyPlayer->mField.size() + friendlyPlayer->mField.size() - 1)
+		{
+			r -= 1;
+		}
 
-void CBless::ReduceHealth(int x)
-{
-}
+		//Increase the friendly mPlayers health
+		friendlyPlayer->IncreaseHealth(mHEALS);
+	}
 
-void CBless::IncreaseHealth(int x)
-{
-}
-
-void CBless::IncreaseAttack(int x)
-{
-}
-
-void CBless::IncreaseProtection(int x)
-{
-}
-
-int CBless::GetProtection()
-{
-	return 0;
+	// Remove bless from play
+	friendlyPlayer->RemoveCardFromField(friendlyPlayer->mField.size() - 1);
 }
 

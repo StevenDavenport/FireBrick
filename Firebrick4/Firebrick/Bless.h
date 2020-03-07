@@ -1,13 +1,17 @@
 #pragma once
 #include "Spell.h"
 
-class CLightning : public CSpell
+class CBless : public CSpell
 {
 public:
 	// Constructor
-	CLightning(const int& type, const std::string& name, const int& attack);
+	CBless(const int& type, const std::string& name, const int& attack);
 
 	// Activates a card
 	virtual void Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer) override final;
+
+private:
+	const int mHEALS = 2;
+
 };
 
