@@ -14,7 +14,7 @@ void CHorde::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 {
 	//Loop through the friendly field checking for horde cards
 	int hordeCount = 0;
-	int defaultAttack = this->GetAttack();
+	const int defaultAttack = this->GetAttack();
 	for (size_t i = 0; i < friendlyPlayer->mField.size(); i++)
 	{
 		if (friendlyPlayer->mField[i]->GetType() == 7)
@@ -29,5 +29,5 @@ void CHorde::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 	CMinion::Activate(friendlyPlayer, enemyPlayer);
 
 	// Reset attack 
-	this->IncreaseAttack(-((hordeCount - 1) * mATTACK_INCREMENT));
+	this->SetAttack(defaultAttack);
 }

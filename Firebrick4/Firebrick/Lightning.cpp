@@ -32,8 +32,5 @@ void CLightning::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 
 	// Output to console
 	CCard::ConsoleOutput(this->GetName(), enemyPlayer->GetName(), enemyPlayer->GetHealthPoints());
-
-	// Delete the spell from the field
-	friendlyPlayer->RemoveCardFromField(friendlyPlayer->mField.size() - 1);
 }
 

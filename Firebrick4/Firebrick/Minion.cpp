@@ -15,7 +15,7 @@ int& CMinion::GetHealth()
 
 void CMinion::ReduceHealth(const int& attackDammage)
 {
-	mHealth -= attackDammage - GetProtection();
+	mHealth -= (attackDammage - this->GetProtection());
 }
 
 void CMinion::IncreaseHealth(const int& heal)
@@ -94,7 +94,7 @@ void CMinion::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 		int r = CRandom::Random(enemyPlayer->mField.size() - 1);
 
 		// Reduce that cards health
-		enemyPlayer->mField[r]->ReduceHealth(GetAttack());
+		enemyPlayer->mField[r]->ReduceHealth(this->GetAttack());
 
 		// Console output
 		CCard::ConsoleOutput(this->GetName(), enemyPlayer->mField[r]->GetName(), enemyPlayer->mField[r]->GetHealth());

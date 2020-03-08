@@ -20,7 +20,4 @@ void CArmour::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 		// Heal player
 		friendlyPlayer->IncreaseHealth(mPROTECT_INC * 2);
 	}
-
-	// Remove armour from the field
-	friendlyPlayer->RemoveCardFromField(friendlyPlayer->mField.size() - 1);
 }

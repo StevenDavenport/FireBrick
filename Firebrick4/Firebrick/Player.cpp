@@ -249,20 +249,23 @@ void CPlayer::PlayCard(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 
 	// Play that card to the field
 	std::cout << mName << " plays " << name << std::endl;
-	mField.push_back(std::move(mHand[r]));
-
-	// Erase from hand
-	mHand.erase(mHand.begin() + r);
 
 	// Cast on play spell
-	if (mField[mField.size() - 1]->IsSpell() == true)
+	if (mHand[r]->IsSpell() == true)
 	{
-		mField[mField.size() - 1]->Activate(friendlyPlayer, enemyPlayer);
+		mHand[r]->Activate(friendlyPlayer, enemyPlayer);
 		if (enemyPlayer->GetHealthPoints() <= 0)
 		{
 			return;
 		}
 	}
+	else 
+	{
+		mField.push_back(std::move(mHand[r]));
+	}
+
+	// Erase from hand
+	mHand.erase(mHand.begin() + r);
 }
 
 void CPlayer::Attack(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)

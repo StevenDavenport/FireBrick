@@ -11,7 +11,7 @@ const bool& CTrample::IsSpell()
 
 void CTrample::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 {
-	bool trample = false;
+	bool trample = true;
 	int newAttack = -1;
 
 	// Keep attacking while got remaining attack
@@ -20,7 +20,7 @@ void CTrample::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 		// Generate a random target
 		int r = CRandom::Random(enemyPlayer->mField.size() - 1);
 
-		// If the enemy has no cards on the field, attack the player
+		// Attack the player
 		if (enemyPlayer->mField.size() <= 0)
 		{
 			// Reducing the enemy mPlayers health
@@ -29,17 +29,14 @@ void CTrample::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 			// Console Output
 			CCard::ConsoleOutput(this->GetName(), enemyPlayer->GetName(), enemyPlayer->GetHealthPoints());
 
-			// If the enemy is dead, end the game
-			if (enemyPlayer->GetHealthPoints() <= 0)
-			{
-				return;
-			}
+			// Stop trample 
+			trample = false;
 		}
-		// If the enemy has cards on the field, attack them
+		// Attack card
 		else
 		{
 			// Recalculate attack dammage
-			newAttack = this->GetAttack() - enemyPlayer->mField[r]->GetHealth();
+			newAttack = this->GetAttack() - enemyPlayer->mField[r]->GetHealth() + enemyPlayer->mField[r]->GetProtection();
 
 			// Enemy take dammage
 			enemyPlayer->mField[r]->ReduceHealth(this->GetAttack());
@@ -52,11 +49,12 @@ void CTrample::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 			if (enemyPlayer->mField[r]->GetHealth() <= 0)
 			{
 				enemyPlayer->RemoveCardFromField(r);
-				newAttack > 0 ? trample = true : trample = false;
+
+				// Set new attack
+				this->SetAttack(newAttack);
 			}
+			newAttack > 0 ? trample = true : trample = false;
 		}
-		// Set new attack
-		this->SetAttack(newAttack);
 	}
 	// Reset attack
 	this->SetAttack(mDEFAULT_ATTACK);

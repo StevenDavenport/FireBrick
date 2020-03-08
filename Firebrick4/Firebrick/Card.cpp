@@ -31,7 +31,7 @@ void CCard::ConsoleOutput(const std::string& attackerName, const std::string& de
 	{
 		// Killed
 		std::cout << attackerName << " attacks " << defenderName << ". ";
-		std::cout << defenderName << " has been killed\n";
+		std::cout << defenderName << " killed\n";
 	}
 }
 

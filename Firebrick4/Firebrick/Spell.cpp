@@ -31,7 +31,7 @@ int& CSpell::GetHealth()
 
 void CSpell::ReduceHealth(const int& attackDammage)
 {
-	mHealth -= attackDammage - GetProtection();
+	mHealth -= attackDammage - this->GetProtection();
 }
 
 void CSpell::IncreaseHealth(const int& heal)

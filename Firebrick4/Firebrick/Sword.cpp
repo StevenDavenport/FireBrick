@@ -19,7 +19,4 @@ void CSword::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 		// Heal the player
 		friendlyPlayer->IncreaseHealth(mATTACK_INC);
 	}
-
-	// Remove the spell from the field
-	friendlyPlayer->RemoveCardFromField(friendlyPlayer->mField.size() - 1);
 }

@@ -68,7 +68,5 @@ void CFireball::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 			enemyPlayer->RemoveCardFromField(r);
 		}
 	}
-	// Delete this card from the field because it is a spell
-	friendlyPlayer->RemoveCardFromField(friendlyPlayer->mField.size() - 1);
 }
 
