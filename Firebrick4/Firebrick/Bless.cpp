@@ -39,7 +39,7 @@ void CBless::Activate(PlayerRef friendlyPlayer, PlayerRef enemyPlayer)
 	else if (r < enemyPlayer->mField.size() + friendlyPlayer->mField.size() + 1)
 	{
 		// Increase the health of a friendly minion
-		friendlyPlayer->mField[r - enemyPlayer->mField.size()]->IncreaseHealth(mHEALS);
+		friendlyPlayer->mField[r - enemyPlayer->mField.size() - 1]->IncreaseHealth(mHEALS);
 	}
 	// Heal friendly player
 	else
