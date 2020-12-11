@@ -1,2 +1,2 @@
 # FireBrick
-FireBrick is a console based cared game that was an advanced C++ programming assignment. 
+FireBrick is a console based card game that was an advanced C++ programming assignment. 
